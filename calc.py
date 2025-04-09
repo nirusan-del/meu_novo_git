@@ -11,7 +11,6 @@ class Calculadora(QWidget):
         self.setGeometry(100, 100, 300, 400)
         self.init_ui()
 
-
     def init_ui(self):
         # Layout principal
         layout = QVBoxLayout()
