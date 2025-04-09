@@ -1,31 +1,53 @@
-def somar(a, b):
-    return a + b
+import sys
+from PyQt5.QtWidgets import QApplication, QMainWindow
+from calculadora_gui import Ui_MainWindow  # interface gerada
 
-def subtrair(a, b):
-    return a - b
+class Calculadora(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.ui = Ui_MainWindow()
+        self.ui.setupUi(self)
 
-def multiplicar(a, b):
-    return a * b
+        # Conectar os botões às funções
+        self.ui.btn_somar.clicked.connect(self.somar)
+        self.ui.btn_subtrair.clicked.connect(self.subtrair)
+        self.ui.btn_multiplicar.clicked.connect(self.multiplicar)
+        self.ui.btn_dividir.clicked.connect(self.dividir)
 
-def dividir(a, b):
-    if b == 0:
-        return "Erro: divisão por zero"
-    return a / b
+    def pegar_valores(self):
+        try:
+            a = float(self.ui.txt_num1.text())
+            b = float(self.ui.txt_num2.text())
+            return a, b
+        except ValueError:
+            self.ui.lbl_resultado.setText("Digite números válidos")
+            return None, None
 
-print("=== Calculadora Matemática ===")
-num1 = float(input("Digite o primeiro número: "))
-operacao = input("Digite a operação (+, -, *, /): ")
-num2 = float(input("Digite o segundo número: "))
+    def somar(self):
+        a, b = self.pegar_valores()
+        if a is not None:
+            self.ui.lbl_resultado.setText(f"Resultado: {a + b}")
 
-if operacao == '+':
-    resultado = somar(num1, num2)
-elif operacao == '-':
-    resultado = subtrair(num1, num2)
-elif operacao == '*':
-    resultado = multiplicar(num1, num2)
-elif operacao == '/':
-    resultado = dividir(num1, num2)
-else:
-    resultado = "Operação inválida"
+    def subtrair(self):
+        a, b = self.pegar_valores()
+        if a is not None:
+            self.ui.lbl_resultado.setText(f"Resultado: {a - b}")
 
-print("Resultado:", resultado)
+    def multiplicar(self):
+        a, b = self.pegar_valores()
+        if a is not None:
+            self.ui.lbl_resultado.setText(f"Resultado: {a * b}")
+
+    def dividir(self):
+        a, b = self.pegar_valores()
+        if a is not None:
+            if b == 0:
+                self.ui.lbl_resultado.setText("Erro: divisão por zero")
+            else:
+                self.ui.lbl_resultado.setText(f"Resultado: {a / b}")
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    janela = Calculadora()
+    janela.show()
+    sys.exit(app.exec_())
